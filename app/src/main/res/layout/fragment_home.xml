@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".presentation.home.HomeFragment">
+
+        <com.kennyc.view.MultiStateView
+            android:id="@+id/msvMovie"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:msv_animateViewChanges="true"
+            app:msv_emptyView="@layout/empty_layout"
+            app:msv_loadingView="@layout/layout_list_movie_shimmer"
+            app:msv_viewState="content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvMovie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/movieitem" />
+
+        </com.kennyc.view.MultiStateView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

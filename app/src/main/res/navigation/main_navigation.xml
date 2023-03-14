@@ -10,4 +10,9 @@
         android:name="com.rukantala.movieapp.presentation.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/genreFragment"
+        android:name="com.rukantala.movieapp.presentation.genre.GenreFragment"
+        android:label="fragment_genre"
+        tools:layout="@layout/fragment_genre" />
 </navigation>

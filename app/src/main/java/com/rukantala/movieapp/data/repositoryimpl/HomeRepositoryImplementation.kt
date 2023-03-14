@@ -2,11 +2,10 @@ package com.rukantala.movieapp.data.repositoryimpl
 
 import android.util.Log
 import com.rukantala.movieapp.data.api.HomeApi
-import com.rukantala.movieapp.data.model.MovieItem
+import com.rukantala.movieapp.domain.entity.GenreEntity
 import com.rukantala.movieapp.domain.entity.MovieEntity
 import com.rukantala.movieapp.domain.repository.HomeRepository
 import com.rukantala.movieapp.utils.BasicResponse
-import com.rukantala.movieapp.utils.ResponseListWrapper
 import com.rukantala.movieapp.utils.Result
 import com.rukantala.movieapp.utils.isNotSuccesfull
 import kotlinx.coroutines.delay
@@ -21,6 +20,43 @@ class HomeRepositoryImplementation @Inject constructor(
         return flow {
             delay(300)
             val response = api.getAllMovies(page)
+
+            if (response.isSuccessful) {
+                val body = response.body()?.data
+                Log.v("DARA", body.toString())
+                val data = mutableListOf<MovieEntity>()
+                body?.forEach { data.add(it.toMovieEntity()) }
+
+                emit(Result.Success(data))
+            } else {
+                emit(Result.Error(isNotSuccesfull(response.errorBody()!!)))
+            }
+        }
+    }
+
+    override suspend fun fetchAllGenre(): Flow<Result<List<GenreEntity>, BasicResponse>> {
+        return flow {
+            delay(300)
+            val response = api.fetchAllGenre()
+
+            if (response.isSuccessful) {
+                val body = response.body()?.data
+                val data = mutableListOf<GenreEntity>()
+                body?.forEach { data.add(it.toGenreEntity()) }
+                emit(Result.Success(data))
+            } else {
+                emit(Result.Error(isNotSuccesfull(response.errorBody()!!)))
+            }
+        }
+    }
+
+    override suspend fun fetchMovieByGenre(
+        genre: String,
+        page: String
+    ): Flow<Result<List<MovieEntity>, BasicResponse>> {
+        return flow {
+            delay(300)
+            val response = api.fetchMovieByGenre(genre, page)
 
             if (response.isSuccessful) {
                 val body = response.body()?.data

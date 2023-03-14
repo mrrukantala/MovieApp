@@ -1,5 +1,6 @@
 package com.rukantala.movieapp.presentation.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rukantala.movieapp.domain.entity.BasicEntity
@@ -36,7 +37,7 @@ class HomeViewModel @Inject constructor(
                     when (it) {
                         is Result.Success -> {
                             _lists.value = it.data
-                            _state.value = HomeState.Success(it.data)
+                            _state.value = HomeState.Success(_lists.value ?: listOf())
                         }
                         is Result.Error -> _state.value = HomeState.Error(it.response.toBasicEntity())
                     }
