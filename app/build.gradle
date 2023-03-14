@@ -99,5 +99,8 @@ dependencies {
     releaseImplementation "com.github.chuckerteam.chucker:library-no-op:3.2.0"
     implementation 'com.auth0.android:jwtdecode:2.0.1'
 
+    // MultiStateView
+    implementation  'com.github.Kennyc1012:MultiStateView:2.2.0'
+
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.0"
 }

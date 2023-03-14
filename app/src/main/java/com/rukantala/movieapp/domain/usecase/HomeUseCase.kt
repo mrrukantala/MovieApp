@@ -4,5 +4,5 @@ import com.rukantala.movieapp.domain.repository.HomeRepository
 import javax.inject.Inject
 
 class HomeUseCase @Inject constructor(private val repo: HomeRepository) {
-    suspend fun getAllMoviews(page: Int) = repo.getAllMoviews(page)
+    suspend fun fetchAllMoviews(page: Int) = repo.getAllMoviews(page)
 }
