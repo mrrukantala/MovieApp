@@ -9,5 +9,4 @@ import javax.inject.Inject
 
 class HomeUseCase @Inject constructor(private val repo: HomeRepository) {
     suspend fun fetchAllMoviews(page: Int) = repo.getAllMoviews(page)
-    suspend fun fetchAllGenre() = repo.fetchAllGenre()
 }
