@@ -12,5 +12,4 @@ interface HomeApi {
     suspend fun getAllMovies(
         @Query("page") page: Int
     ): Response<ResponseListWrapper<MovieItem>>
-//{{BASE}}list/1/?page=1&api_key={{api_key}}
 }

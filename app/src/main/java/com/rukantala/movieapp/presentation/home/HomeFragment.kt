@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.rukantala.movieapp.R
+import com.rukantala.movieapp.databinding.FragmentHomeBinding
 import com.rukantala.movieapp.domain.entity.BasicEntity
 import com.rukantala.movieapp.domain.entity.MovieEntity
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,66 +18,84 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), HomeDataContract {
+class HomeFragment : Fragment() {
+    lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = viewLifecycleOwner
+        observer()
+    }
+
+    private fun observer() {
+        fetchAllMovie()
+
         viewModel.state.flowWithLifecycle(lifecycle)
-            .onEach { state -> HomeObserver(this, viewModel, state) }
+            .onEach { handleStateHome(it) }
             .launchIn(lifecycleScope)
     }
 
-    override fun fetchAllMovie() {
+    private fun handleStateHome(state: HomeState) {
+        when (state) {
+            is HomeState.Loading -> movieOnLoading()
+            is HomeState.Success -> movieOnSuccess(state.data)
+            is HomeState.Empty -> movieOnEmpty(state.data)
+            is HomeState.Error -> movieOnError(state.data)
+            else -> {}
+        }
+    }
+
+    private fun fetchAllMovie() {
         Log.v("DATA", "GET")
         viewModel.fetchAllMovie()
     }
 
-    override fun movieOnLoading() {
+    private fun movieOnLoading() {
         Log.v("DATA", "LOADING")
-        TODO("Not yet implemented")
     }
 
-    override fun movieOnSuccess(data: List<MovieEntity>) {
+    private fun movieOnSuccess(data: List<MovieEntity>) {
         Log.v("DATA", "SUKSES")
-        TODO("Not yet implemented")
     }
 
-    override fun movieOnEmpty(data: List<MovieEntity>) {
+    private fun movieOnEmpty(data: List<MovieEntity>) {
         Log.v("DATA", "KOSONG")
-        TODO("Not yet implemented")
+
     }
 
-    override fun movieOnError(e: BasicEntity?) {
+    private fun movieOnError(e: BasicEntity?) {
         Log.v("DATA", "ERROR")
-        TODO("Not yet implemented")
+
     }
 
-    override fun fetchLoadMoreMovie() {
-        TODO("Not yet implemented")
+    private fun fetchLoadMoreMovie() {
+
     }
 
-    override fun movieLoadMoreOnLoading() {
-        TODO("Not yet implemented")
+    private fun movieLoadMoreOnLoading() {
+
     }
 
-    override fun movieLoadMoreOnSuccess(data: List<MovieEntity>) {
-        TODO("Not yet implemented")
+    private fun movieLoadMoreOnSuccess(data: List<MovieEntity>) {
+
     }
 
-    override fun movieLoadMoreOnEmpty() {
-        TODO("Not yet implemented")
+    private fun movieLoadMoreOnEmpty() {
+
     }
 
-    override fun movieLoadMoreOnError(e: BasicEntity?) {
-        TODO("Not yet implemented")
+    private fun movieLoadMoreOnError(e: BasicEntity?) {
+
     }
 
 }

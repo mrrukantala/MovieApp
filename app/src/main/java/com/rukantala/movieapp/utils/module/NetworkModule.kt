@@ -1,8 +1,9 @@
 package com.rukantala.movieapp.utils.module
 
 import android.content.Context
-import com.rukantala.movieapp.BuildConfig
+import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.rukantala.movieapp.BuildConfig
 import com.rukantala.movieapp.utils.RequestInterceptor
 import dagger.Module
 import dagger.Provides
@@ -27,6 +28,7 @@ object NetworkModule {
             client(
                 okHttp.newBuilder().addInterceptor(
                     ChuckerInterceptor.Builder(context)
+                        .collector(ChuckerCollector(context, true))
                         .maxContentLength(250000L)
                         .redactHeaders(emptySet())
                         .alwaysReadResponseBody(false)

@@ -1,5 +1,6 @@
 package com.rukantala.movieapp.data.repositoryimpl
 
+import android.util.Log
 import com.rukantala.movieapp.data.api.HomeApi
 import com.rukantala.movieapp.data.model.MovieItem
 import com.rukantala.movieapp.domain.entity.MovieEntity
@@ -20,6 +21,7 @@ class HomeRepositoryImplementation @Inject constructor(
         return flow {
             delay(300)
             val response = api.getAllMovies(page)
+
             if (response.isSuccessful) {
                 val body = response.body()?.data
                 val data = mutableListOf<MovieEntity>()
