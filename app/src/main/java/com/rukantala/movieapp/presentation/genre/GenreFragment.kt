@@ -10,7 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import com.kennyc.view.MultiStateView
+import com.rukantala.movieapp.R
 import com.rukantala.movieapp.databinding.FragmentGenreBinding
 import com.rukantala.movieapp.domain.entity.BasicEntity
 import com.rukantala.movieapp.domain.entity.GenreEntity
@@ -23,9 +26,17 @@ class GenreFragment : Fragment() {
     lateinit var binding: FragmentGenreBinding
     private val viewModel: GenreViewModel by viewModels()
 
+    private val menuNavController: NavController? by lazy {
+        activity?.findNavController(R.id.nav_host_fragment_menu)
+    }
+
     private val adapter: GenreAdapter by lazy {
         GenreAdapter(GenreAdapter.OnclickListener {
-
+            menuNavController?.navigate(
+                GenreFragmentDirections.actionGenreFragmentToMovieByGenreFragment(
+                it.id.toString()
+                )
+            )
         })
     }
 

@@ -9,10 +9,39 @@
         android:id="@+id/homeFragment"
         android:name="com.rukantala.movieapp.presentation.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_detailMovieFragment"
+            app:destination="@id/detailMovieFragment" />
+    </fragment>
     <fragment
         android:id="@+id/genreFragment"
         android:name="com.rukantala.movieapp.presentation.genre.GenreFragment"
         android:label="fragment_genre"
-        tools:layout="@layout/fragment_genre" />
+        tools:layout="@layout/fragment_genre" >
+        <action
+            android:id="@+id/action_genreFragment_to_movieByGenreFragment"
+            app:destination="@id/movieByGenreFragment" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/fragment_movie_by_genre"
+        android:id="@+id/movieByGenreFragment"
+        android:name="com.rukantala.movieapp.presentation.genre.bygenre.MovieByGenreFragment"
+        android:label="MovieByGenreFragment" >
+        <action
+            android:id="@+id/action_movieByGenreFragment_to_detailMovieFragment"
+            app:destination="@id/detailMovieFragment" />
+        <argument
+            android:name="idGenre"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailMovieFragment"
+        android:name="com.rukantala.movieapp.presentation.detail.DetailMovieFragment"
+        android:label="fragment_detail_movie"
+        tools:layout="@layout/fragment_detail_movie" >
+        <argument
+            android:name="idMovie"
+            app:argType="string" />
+    </fragment>
 </navigation>

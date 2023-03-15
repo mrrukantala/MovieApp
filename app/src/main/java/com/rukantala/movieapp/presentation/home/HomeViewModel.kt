@@ -53,5 +53,4 @@ sealed class HomeState {
     data class Success(val data: List<MovieEntity>) : HomeState()
     data class Empty(val data: List<MovieEntity> = mutableListOf()) : HomeState()
     data class Error(val data: BasicEntity?) : HomeState()
-
 }

@@ -103,5 +103,9 @@ dependencies {
     // MultiStateView
     implementation  'com.github.Kennyc1012:MultiStateView:2.2.0'
 
+    // Youtube Player Vide
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0'
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:0.26'
+
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.0"
 }

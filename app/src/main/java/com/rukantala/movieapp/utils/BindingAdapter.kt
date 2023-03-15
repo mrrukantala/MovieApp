@@ -11,7 +11,7 @@ import coil.request.ImageRequest
 fun bindImageBerita(iv: ImageView, url: String?) {
     url?.apply {
         val imageUrl = ImageRequest.Builder(iv.context)
-            .data("http://image.tmdb.org/t/p/w500${this.toUri()}")
+            .data("https://image.tmdb.org/t/p/w500${this.toUri()}")
             .allowHardware(false)
             .target(iv)
             .build()

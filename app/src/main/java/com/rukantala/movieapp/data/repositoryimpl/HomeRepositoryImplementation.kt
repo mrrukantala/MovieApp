@@ -2,8 +2,7 @@ package com.rukantala.movieapp.data.repositoryimpl
 
 import android.util.Log
 import com.rukantala.movieapp.data.api.HomeApi
-import com.rukantala.movieapp.domain.entity.GenreEntity
-import com.rukantala.movieapp.domain.entity.MovieEntity
+import com.rukantala.movieapp.domain.entity.*
 import com.rukantala.movieapp.domain.repository.HomeRepository
 import com.rukantala.movieapp.utils.BasicResponse
 import com.rukantala.movieapp.utils.Result
@@ -23,7 +22,6 @@ class HomeRepositoryImplementation @Inject constructor(
 
             if (response.isSuccessful) {
                 val body = response.body()?.data
-                Log.v("DARA", body.toString())
                 val data = mutableListOf<MovieEntity>()
                 body?.forEach { data.add(it.toMovieEntity()) }
 
@@ -60,9 +58,57 @@ class HomeRepositoryImplementation @Inject constructor(
 
             if (response.isSuccessful) {
                 val body = response.body()?.data
+                Log.v("DD", body.toString())
                 val data = mutableListOf<MovieEntity>()
                 body?.forEach { data.add(it.toMovieEntity()) }
                 emit(Result.Success(data))
+            } else {
+                emit(Result.Error(isNotSuccesfull(response.errorBody()!!)))
+            }
+        }
+    }
+
+    override suspend fun fetchDetailMovie(movieId: String): Flow<Result<DetailMovieEntity, BasicResponse>> {
+        return flow {
+            delay(300)
+            val response = api.fetchDetailMovie(movieId)
+
+            if (response.isSuccessful) {
+                emit(Result.Success(response.body()?.toDetailMovie()!!))
+            } else {
+                emit(Result.Error(isNotSuccesfull(response.errorBody()!!)))
+            }
+        }
+    }
+
+    override suspend fun fetchVideoMovie(movieId: String): Flow<Result<List<VideoEntity>, BasicResponse>> {
+        return flow {
+            delay(300)
+            val response = api.fetchVideoMovie(movieId)
+            if (response.isSuccessful) {
+                val body = response.body()?.data
+                val data = mutableListOf<VideoEntity>()
+                body?.forEach { data.add(it.toVideoEntity()) }
+                emit(Result.Success(data))
+            } else {
+                emit(Result.Error(isNotSuccesfull(response.errorBody()!!)))
+            }
+        }
+    }
+
+    override suspend fun fetchReview(
+        movieId: String,
+        page: String
+    ): Flow<Result<List<ReviewEntity>, BasicResponse>> {
+        return flow {
+            delay(300)
+            val response = api.fetchReview(movieId, page)
+            if (response.isSuccessful) {
+                val body = response.body()?.data
+                val data = mutableListOf<ReviewEntity>()
+                body?.forEach {
+                    data.add(it.toReviewEntity())
+                }
             } else {
                 emit(Result.Error(isNotSuccesfull(response.errorBody()!!)))
             }
