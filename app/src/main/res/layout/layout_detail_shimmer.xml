@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <View
-            android:id="@+id/ivBanner"
+            android:id="@+id/v1"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="@drawable/bg_shimmer"
@@ -27,7 +27,7 @@
             tools:layout_editor_absoluteX="0dp">
 
             <View
-                android:id="@+id/cardView2"
+                android:id="@+id/v2"
                 android:layout_width="180dp"
                 android:layout_height="220dp"
                 android:layout_marginStart="@dimen/_16dp"
@@ -38,30 +38,30 @@
                 app:layout_constraintVertical_bias="0.39" />
 
             <View
-                android:id="@+id/tvTitle"
+                android:id="@+id/v3"
                 android:layout_width="180dp"
                 android:layout_height="@dimen/_20dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="@dimen/_12dp"
                 android:layout_marginBottom="4dp"
                 android:background="@drawable/bg_shimmer"
-                app:layout_constraintBottom_toTopOf="@+id/tvRate"
+                app:layout_constraintBottom_toTopOf="@+id/v4"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView2"
+                app:layout_constraintTop_toBottomOf="@+id/v2"
                 app:layout_constraintVertical_bias="0.19" />
 
             <TextView
-                android:id="@+id/tvRate"
+                android:id="@+id/v4"
                 android:layout_width="@dimen/_120dp"
                 android:layout_height="@dimen/_20dp"
                 android:layout_marginHorizontal="@dimen/_16dp"
                 android:layout_marginTop="@dimen/_4dp"
                 android:background="@drawable/bg_shimmer"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/v3" />
 
             <LinearLayout
-                android:id="@+id/rvGenre"
+                android:id="@+id/v5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_8dp"
@@ -69,7 +69,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvRate"
+                app:layout_constraintTop_toBottomOf="@+id/v4"
                 tools:listitem="@layout/genreitemchip">
 
                 <com.google.android.material.chip.Chip
@@ -90,17 +90,17 @@
             </LinearLayout>
 
             <View
-                android:id="@+id/tvLabelDescription"
+                android:id="@+id/v6"
                 android:layout_width="@dimen/_200dp"
                 android:layout_height="@dimen/_20dp"
                 android:layout_marginHorizontal="@dimen/_16dp"
                 android:layout_marginTop="@dimen/_12dp"
                 android:background="@drawable/bg_shimmer"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rvGenre" />
+                app:layout_constraintTop_toBottomOf="@+id/v5" />
 
             <View
-                android:id="@+id/tvValueDescription"
+                android:id="@+id/v7"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:layout_marginHorizontal="@dimen/_16dp"
@@ -108,7 +108,7 @@
                 android:background="@drawable/bg_shimmer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvLabelDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/v6" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
