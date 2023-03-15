@@ -1,7 +1,6 @@
 package com.rukantala.movieapp.presentation.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +24,11 @@ import kotlinx.coroutines.flow.onEach
 class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
+
+    private var isRequestingLoadMoreData = false
+    private var isLoadMoreFinish = false
+
+    val currentData: MutableList<MovieEntity> = mutableListOf()
 
     private val menuNavController: NavController? by lazy {
         activity?.findNavController(R.id.nav_host_fragment_menu)
@@ -53,6 +57,15 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
+        with(binding.nsv) {
+            viewTreeObserver.addOnScrollChangedListener {
+
+                val view = getChildAt(childCount - 1)
+                if (view.bottom - (height + scrollY) == 0 && !isRequestingLoadMoreData && !isLoadMoreFinish) {
+                    fetchLoadMoreMovie()
+                }
+            }
+        }
         observer()
     }
 
@@ -62,12 +75,32 @@ class HomeFragment : Fragment() {
         viewModel.state.flowWithLifecycle(lifecycle)
             .onEach { handleStateHome(it) }
             .launchIn(lifecycleScope)
+
+        viewModel.stateLoadMore.flowWithLifecycle(lifecycle)
+            .onEach { handleStateLoadMoreHome(it) }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun handleStateLoadMoreHome(state: HomeLoadMoreState) {
+        when (state) {
+            is HomeLoadMoreState.Loading -> movieLoadMoreOnLoading()
+            is HomeLoadMoreState.Success -> {
+                movieLoadMoreOnSuccess(state.data)
+                viewModel.page++
+            }
+            is HomeLoadMoreState.Empty -> movieLoadMoreOnEmpty()
+            is HomeLoadMoreState.Error -> movieLoadMoreOnError(state.data)
+            else -> {}
+        }
     }
 
     private fun handleStateHome(state: HomeState) {
         when (state) {
             is HomeState.Loading -> movieOnLoading()
-            is HomeState.Success -> movieOnSuccess(state.data)
+            is HomeState.Success -> {
+                movieOnSuccess(state.data)
+                viewModel.page++
+            }
             is HomeState.Empty -> movieOnEmpty(state.data)
             is HomeState.Error -> movieOnError(state.data)
             else -> {}
@@ -83,12 +116,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun movieOnSuccess(data: List<MovieEntity>) {
-        val adapter = binding.rvMovie.adapter as MovieAdapter
-        adapter.submitList(data)
+        currentData.addAll(data)
+        adapter.submitList(currentData)
 
         binding.msvMovie.viewState =
             if (data.isEmpty()) MultiStateView.ViewState.EMPTY else MultiStateView.ViewState.CONTENT
-        adapter.submitList(data)
     }
 
     private fun movieOnEmpty(data: List<MovieEntity>) {
@@ -102,15 +134,21 @@ class HomeFragment : Fragment() {
     }
 
     private fun fetchLoadMoreMovie() {
-
+        viewModel.fetchLoadMoreMovie()
     }
 
     private fun movieLoadMoreOnLoading() {
-
+        Toast.makeText(requireContext(), getString(R.string.lbl_loading), Toast.LENGTH_SHORT).show()
     }
 
     private fun movieLoadMoreOnSuccess(data: List<MovieEntity>) {
+        if (data.isNotEmpty()) {
+            currentData.addAll(data)
+            adapter.notifyDataSetChanged()
+            adapter.submitList(currentData)
 
+            viewModel.page++
+        }
     }
 
     private fun movieLoadMoreOnEmpty() {

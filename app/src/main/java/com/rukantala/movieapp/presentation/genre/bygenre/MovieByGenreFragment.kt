@@ -1,7 +1,6 @@
 package com.rukantala.movieapp.presentation.genre.bygenre
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,15 +28,22 @@ class MovieByGenreFragment : Fragment() {
     private val viewModel: MovieByGenreViewModel by viewModels()
     private val args: MovieByGenreFragmentArgs by navArgs()
 
+    private var isRequestingLoadMoreData = false
+    private var isLoadMoreFinish = false
+
+    val currentData: MutableList<MovieEntity> = mutableListOf()
+
     private val menuNavController: NavController? by lazy {
         activity?.findNavController(R.id.nav_host_fragment_menu)
     }
 
     private val adapter: MovieAdapter by lazy {
         MovieAdapter(MovieAdapter.OnclickListener {
-            menuNavController?.navigate(MovieByGenreFragmentDirections.actionMovieByGenreFragmentToDetailMovieFragment(
-                it.id
-            ))
+            menuNavController?.navigate(
+                MovieByGenreFragmentDirections.actionMovieByGenreFragmentToDetailMovieFragment(
+                    it.id
+                )
+            )
         })
     }
 
@@ -55,6 +61,15 @@ class MovieByGenreFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
+        with(binding.nsv) {
+            viewTreeObserver.addOnScrollChangedListener {
+
+                val view = getChildAt(childCount - 1)
+                if (view.bottom - (height + scrollY) == 0 && !isRequestingLoadMoreData && !isLoadMoreFinish) {
+                    fetchLoadMoreMovie(args.idGenre)
+                }
+            }
+        }
         observer()
     }
 
@@ -64,12 +79,32 @@ class MovieByGenreFragment : Fragment() {
         viewModel.state.flowWithLifecycle(lifecycle)
             .onEach { handleStateHome(it) }
             .launchIn(lifecycleScope)
+
+        viewModel.loadMoreState.flowWithLifecycle(lifecycle)
+            .onEach { handleStateLoadMore(it) }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun handleStateLoadMore(state: LoadMoreMovieByGenre) {
+        when (state) {
+            is LoadMoreMovieByGenre.Loading -> movieLoadMoreOnLoading()
+            is LoadMoreMovieByGenre.Success -> {
+                movieLoadMoreOnSuccess(state.data)
+                viewModel.page++
+            }
+            is LoadMoreMovieByGenre.Empty -> movieLoadMoreOnEmpty()
+            is LoadMoreMovieByGenre.Error -> movieLoadMoreOnError(state.data)
+            else -> {}
+        }
     }
 
     private fun handleStateHome(state: MovieByGenre) {
         when (state) {
             is MovieByGenre.Loading -> movieOnLoading()
-            is MovieByGenre.Success -> movieOnSuccess(state.data)
+            is MovieByGenre.Success -> {
+                movieOnSuccess(state.data)
+                viewModel.page++
+            }
             is MovieByGenre.Empty -> movieOnEmpty(state.data)
             is MovieByGenre.Error -> movieOnError(state.data)
             else -> {}
@@ -85,13 +120,12 @@ class MovieByGenreFragment : Fragment() {
     }
 
     private fun movieOnSuccess(data: List<MovieEntity>) {
-        Log.v("DATA", data.toString())
-        val adapter = binding.rvMovieByGenre.adapter as MovieAdapter
+        currentData.addAll(data)
         adapter.submitList(data)
 
         binding.msvMovieByGenre.viewState =
             if (data.isEmpty()) MultiStateView.ViewState.EMPTY else MultiStateView.ViewState.CONTENT
-        adapter.submitList(data)
+
     }
 
     private fun movieOnEmpty(data: List<MovieEntity>) {
@@ -104,16 +138,20 @@ class MovieByGenreFragment : Fragment() {
             .show()
     }
 
-    private fun fetchLoadMoreMovie() {
-
+    private fun fetchLoadMoreMovie(idGenre: String) {
+        viewModel.fetchLoadMoreAllMovieByGenre(idGenre)
     }
 
     private fun movieLoadMoreOnLoading() {
-
+        Toast.makeText(requireContext(), getString(R.string.lbl_loading), Toast.LENGTH_SHORT).show()
     }
 
     private fun movieLoadMoreOnSuccess(data: List<MovieEntity>) {
-
+        if (data.isNotEmpty()) {
+            currentData.addAll(data)
+            adapter.notifyDataSetChanged()
+            adapter.submitList(currentData)
+        }
     }
 
     private fun movieLoadMoreOnEmpty() {

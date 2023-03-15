@@ -25,10 +25,16 @@ class HomeViewModel @Inject constructor(
     private val _lists = MutableStateFlow<List<MovieEntity>?>(mutableListOf())
     val list get() = _lists
 
+    private val _stateLoadMore = MutableStateFlow<HomeLoadMoreState>(HomeLoadMoreState.Init)
+    val stateLoadMore get() = _stateLoadMore
+
+    private val _loadMoreList = MutableStateFlow<List<MovieEntity>?>(mutableListOf())
+    val loadMoreList get() = _loadMoreList
+
     var page = 1
 
     fun fetchAllMovie() {
-        page = 1
+        page =1
         viewModelScope.launch {
             useCase.fetchAllMoviews(page)
                 .onStart { _state.value = HomeState.Loading(true) }
@@ -45,6 +51,23 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun fetchLoadMoreMovie() {
+        viewModelScope.launch {
+            useCase.fetchAllMoviews(page)
+                .onStart { _stateLoadMore.value = HomeLoadMoreState.Loading(true) }
+                .catch { }
+                .collect {
+                    when (it) {
+                        is Result.Success -> {
+                            _lists.value = it.data
+                            _stateLoadMore.value = HomeLoadMoreState.Success(_lists.value ?: listOf())
+                        }
+                        is Result.Error -> _stateLoadMore.value = HomeLoadMoreState.Error(it.response.toBasicEntity())
+                    }
+                }
+        }
+    }
+
 }
 
 sealed class HomeState {
@@ -53,4 +76,12 @@ sealed class HomeState {
     data class Success(val data: List<MovieEntity>) : HomeState()
     data class Empty(val data: List<MovieEntity> = mutableListOf()) : HomeState()
     data class Error(val data: BasicEntity?) : HomeState()
+}
+
+sealed class HomeLoadMoreState {
+    object Init : HomeLoadMoreState()
+    data class Loading(val isLoading: Boolean = true) : HomeLoadMoreState()
+    data class Success(val data: List<MovieEntity>) : HomeLoadMoreState()
+    data class Empty(val data: List<MovieEntity> = mutableListOf()) : HomeLoadMoreState()
+    data class Error(val data: BasicEntity?) : HomeLoadMoreState()
 }

@@ -32,6 +32,9 @@ class DetailMovieFragment : Fragment() {
     lateinit var binding: FragmentDetailMovieBinding
     private val viewModel: DetailMovieViewModel by viewModels()
 
+    private var isRequestingLoadMoreData = false
+    private var isLoadMoreFinish = false
+
     private val menuNavController: NavController? by lazy {
         activity?.findNavController(R.id.nav_host_fragment_menu)
     }

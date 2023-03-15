@@ -23,6 +23,12 @@ class MovieByGenreViewModel @Inject constructor(
     private val _lists = MutableStateFlow<List<MovieEntity>?>(mutableListOf())
     val list get() = _lists
 
+    private val _loadMoreState = MutableStateFlow<LoadMoreMovieByGenre>(LoadMoreMovieByGenre.Init)
+    val loadMoreState get() = _loadMoreState
+
+    private val _loadMoreLists = MutableStateFlow<List<MovieEntity>?>(mutableListOf())
+    val loadMoreList get() = _loadMoreLists
+
     var page = 1
 
     fun fetchAllMovieByGenre(genre: String) {
@@ -43,6 +49,25 @@ class MovieByGenreViewModel @Inject constructor(
                 }
         }
     }
+
+    fun fetchLoadMoreAllMovieByGenre(genre: String) {
+        viewModelScope.launch {
+            useCase.fetchMovieByGenre(genre, page.toString())
+                .onStart { _loadMoreState.value = LoadMoreMovieByGenre.Loading(true) }
+                .catch { }
+                .collect {
+                    when (it) {
+                        is Result.Success -> {
+                            _loadMoreLists.value = it.data
+                            _loadMoreState.value =
+                                LoadMoreMovieByGenre.Success(_loadMoreLists.value ?: listOf())
+                        }
+                        is Result.Error -> _loadMoreState.value =
+                            LoadMoreMovieByGenre.Error(it.response.toBasicEntity())
+                    }
+                }
+        }
+    }
 }
 
 sealed class MovieByGenre {
@@ -51,4 +76,12 @@ sealed class MovieByGenre {
     data class Success(val data: List<MovieEntity>) : MovieByGenre()
     data class Empty(val data: List<MovieEntity> = mutableListOf()) : MovieByGenre()
     data class Error(val data: BasicEntity?) : MovieByGenre()
+}
+
+sealed class LoadMoreMovieByGenre {
+    object Init : LoadMoreMovieByGenre()
+    data class Loading(val isLoading: Boolean = true) : LoadMoreMovieByGenre()
+    data class Success(val data: List<MovieEntity>) : LoadMoreMovieByGenre()
+    data class Empty(val data: List<MovieEntity> = mutableListOf()) : LoadMoreMovieByGenre()
+    data class Error(val data: BasicEntity?) : LoadMoreMovieByGenre()
 }

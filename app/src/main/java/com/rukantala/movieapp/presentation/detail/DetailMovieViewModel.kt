@@ -122,7 +122,6 @@ sealed class DetailDataState {
     data class Empty(val data: DetailMovieEntity) : DetailDataState()
     data class Error(val data: BasicEntity?) : DetailDataState()
 }
-
 sealed class ReviewMovieState {
     object Init : ReviewMovieState()
     data class Loading(val isLoading: Boolean = true) : ReviewMovieState()
@@ -130,7 +129,13 @@ sealed class ReviewMovieState {
     data class Empty(val data: List<ReviewEntity>) : ReviewMovieState()
     data class Error(val data: BasicEntity?) : ReviewMovieState()
 }
-
+sealed class LoadMoreReviewMovieState {
+    object Init : LoadMoreReviewMovieState()
+    data class Loading(val isLoading: Boolean = true) : LoadMoreReviewMovieState()
+    data class Success(val data: List<ReviewEntity>) : LoadMoreReviewMovieState()
+    data class Empty(val data: List<ReviewEntity>) : LoadMoreReviewMovieState()
+    data class Error(val data: BasicEntity?) : LoadMoreReviewMovieState()
+}
 sealed class VideoMovieState {
     object Init : VideoMovieState()
     data class Loading(val isLoading: Boolean = true) : VideoMovieState()

@@ -7,23 +7,31 @@
         android:layout_height="match_parent"
         tools:context=".presentation.home.HomeFragment">
 
-        <com.kennyc.view.MultiStateView
-            android:id="@+id/msvMovie"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nsv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:msv_animateViewChanges="true"
-            app:msv_emptyView="@layout/empty_layout"
-            app:msv_loadingView="@layout/layout_list_movie_shimmer"
-            app:msv_viewState="content">
+            android:layout_height="match_parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvMovie"
+            <com.kennyc.view.MultiStateView
+                android:id="@+id/msvMovie"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/movieitem" />
+                app:msv_animateViewChanges="true"
+                app:msv_emptyView="@layout/empty_layout"
+                app:msv_loadingView="@layout/layout_list_movie_shimmer"
+                app:msv_viewState="content">
 
-        </com.kennyc.view.MultiStateView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvMovie"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/movieitem" />
+
+            </com.kennyc.view.MultiStateView>
+
+        </androidx.core.widget.NestedScrollView>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

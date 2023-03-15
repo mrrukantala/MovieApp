@@ -8,4 +8,5 @@
     <string name="lbl_description">Description</string>
     <string name="lbl_video_thiler">Video Thiler</string>
     <string name="lbl_user_review">User Review</string>
+    <string name="lbl_loading">Loading</string>
 </resources>
