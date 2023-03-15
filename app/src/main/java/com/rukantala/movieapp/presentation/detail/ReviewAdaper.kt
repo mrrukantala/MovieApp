@@ -17,8 +17,6 @@ class ReviewAdapter :
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: ReviewEntity) {
             binding.item = data
-            binding.apply {
-            }
             binding.executePendingBindings()
         }
     }

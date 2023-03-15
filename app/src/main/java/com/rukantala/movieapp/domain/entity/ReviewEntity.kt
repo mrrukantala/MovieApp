@@ -9,5 +9,6 @@ data class ReviewEntity(
 
 
 data class AuthorDetailEntity(
+    val avatar: String,
     val rating: Double
 )

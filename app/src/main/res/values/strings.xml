@@ -6,4 +6,6 @@
     <string name="lbl_menu_genre">Genre</string>
     <string name="lbl_rating">Rating</string>
     <string name="lbl_description">Description</string>
+    <string name="lbl_video_thiler">Video Thiler</string>
+    <string name="lbl_user_review">User Review</string>
 </resources>

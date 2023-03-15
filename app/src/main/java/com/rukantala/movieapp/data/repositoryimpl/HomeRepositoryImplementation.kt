@@ -101,12 +101,14 @@ class HomeRepositoryImplementation @Inject constructor(
         return flow {
             delay(300)
             val response = api.fetchReview(movieId, page)
+
             if (response.isSuccessful) {
                 val body = response.body()?.data
                 val data = mutableListOf<ReviewEntity>()
                 body?.forEach {
                     data.add(it.toReviewEntity())
                 }
+                emit(Result.Success(data))
             } else {
                 emit(Result.Error(isNotSuccesfull(response.errorBody()!!)))
             }

@@ -81,6 +81,7 @@ class DetailMovieViewModel @Inject constructor(
                 .collect {
                     when (it) {
                         is Result.Success -> {
+
                             _dataReview.value = it.data
                             _stateReview.value =
                                 ReviewMovieState.Success(_dataReview.value ?: listOf())

@@ -2,6 +2,7 @@ package com.rukantala.movieapp.presentation.detail
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -126,7 +127,9 @@ class DetailMovieFragment : Fragment() {
     }
 
     private fun fetchReviewMovieOnSuccess(data: List<ReviewEntity>) {
-        binding.msvReview.viewState = MultiStateView.ViewState.ERROR
+
+
+        binding.msvReview.viewState = MultiStateView.ViewState.CONTENT
         val adapter = binding.rvReview.adapter as ReviewAdapter
         adapter.submitList(data)
     }
@@ -188,6 +191,7 @@ class DetailMovieFragment : Fragment() {
 
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 youTubePlayer.loadVideo(data[0].key, 0F)
+                youTubePlayer.pause()
             }
 
             override fun onStateChange(
@@ -202,6 +206,7 @@ class DetailMovieFragment : Fragment() {
             }
 
             override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {
+                youTubePlayer.pause()
 
             }
 

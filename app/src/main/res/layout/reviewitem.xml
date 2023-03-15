@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -8,9 +10,7 @@
             type="com.rukantala.movieapp.domain.entity.ReviewEntity" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp">
@@ -18,9 +18,9 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_8dp"
-            android:layout_marginVertical="@dimen/_4dp"
-            app:cardCornerRadius="@dimen/_8dp"
+            android:layout_marginHorizontal="@dimen/_12dp"
+            android:layout_marginVertical="@dimen/_2dp"
+            app:cardCornerRadius="@dimen/_12dp"
             app:cardElevation="@dimen/_2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -32,12 +32,14 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/civPersonReview"
+                    imageAvatar="@{item.authorDetail.avatar}"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginVertical="@dimen/_16dp"
                     android:layout_marginStart="@dimen/_8dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
                     android:id="@+id/tvReviewer"
                     style="@style/nunitosans.14sp.Black1"
@@ -46,17 +48,17 @@
                     android:layout_marginStart="@dimen/_8dp"
                     android:text="@{item.author}"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/civPersonReview"
                     app:layout_constraintStart_toEndOf="@+id/civPersonReview"
                     app:layout_constraintTop_toTopOf="@+id/civPersonReview"
                     tools:text="AA" />
 
                 <TextView
                     android:id="@+id/tvReview"
-                    style="@style/nunitosans.12sp.Black2"
+                    style="@style/nunitosans.14sp.Black2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginBottom="@dimen/_16dp"
                     android:text="@{item.content}"
                     app:layout_constraintBottom_toBottomOf="parent"

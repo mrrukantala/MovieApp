@@ -5,10 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.rukantala.movieapp.databinding.MovieitemBinding
 import com.rukantala.movieapp.domain.entity.MovieEntity
-import com.rukantala.movieapp.utils.bindImageBerita
 
 class MovieAdapter(val onClickListener: OnclickListener) :
     ListAdapter<MovieEntity, MovieAdapter.ViewHolder>(
@@ -39,7 +37,7 @@ class MovieAdapter(val onClickListener: OnclickListener) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(MovieitemBinding.inflate(LayoutInflater.from(parent.context),parent, false))
+        ViewHolder(MovieitemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val pelatihanItem = getItem(position)

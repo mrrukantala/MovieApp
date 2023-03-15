@@ -13,13 +13,14 @@ data class ReviewItem(
     fun toReviewEntity() = ReviewEntity(
         id ?: "",
         author ?: "",
-        authorDetail?.toAuthorDetailEntity() ?: AuthorDetailEntity(0.0),
+        authorDetail?.toAuthorDetailEntity() ?: AuthorDetailEntity("", 0.0),
         content ?: ""
     )
 }
 
 data class AuthorDetailItem(
+    @field:SerializedName("avatar_path") val avatar: String?= "",
     @field:SerializedName("rating") val rating: Double? = 0.0
 ) {
-    fun toAuthorDetailEntity() = AuthorDetailEntity(rating ?: 0.0)
+    fun toAuthorDetailEntity() = AuthorDetailEntity(avatar ?: "",rating ?: 0.0)
 }
