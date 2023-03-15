@@ -33,6 +33,12 @@ class DetailMovieViewModel @Inject constructor(
     private val _dataReview = MutableStateFlow<List<ReviewEntity>?>(mutableListOf())
     val dataReview get() = _dataReview
 
+    private val _loadMoreStateReview = MutableStateFlow<LoadMoreReviewMovieState>(LoadMoreReviewMovieState.Init)
+    val loadMoreStateReview get() = _loadMoreStateReview
+
+    private val _loadMoreDataReview = MutableStateFlow<List<ReviewEntity>?>(mutableListOf())
+    val loadMoreDataReview get() = _loadMoreDataReview
+
     private val _stateVideo = MutableStateFlow<VideoMovieState>(VideoMovieState.Init)
     val stateVideo get() = _stateVideo
 
@@ -46,7 +52,8 @@ class DetailMovieViewModel @Inject constructor(
 
             useCase.fetchDetailMovie(movieId)
                 .onStart {
-                    _stateData.value = DetailDataState.Loading(true) }
+                    _stateData.value = DetailDataState.Loading(true)
+                }
                 .catch { }
                 .collect {
                     when (it) {
@@ -73,21 +80,40 @@ class DetailMovieViewModel @Inject constructor(
         }
     }
 
-    fun fetchReviewData(movieId: String, page: String) {
+    fun fetchReviewData(movieId: String) {
+        page = 1
         viewModelScope.launch {
-            useCase.fetchReview(movieId, page)
+            useCase.fetchReview(movieId, page.toString())
                 .onStart { _stateReview.value = ReviewMovieState.Loading(true) }
                 .catch { }
                 .collect {
                     when (it) {
                         is Result.Success -> {
-
                             _dataReview.value = it.data
                             _stateReview.value =
                                 ReviewMovieState.Success(_dataReview.value ?: listOf())
                         }
                         is Result.Error -> _stateReview.value =
                             ReviewMovieState.Error(it.response.toBasicEntity())
+                    }
+                }
+        }
+    }
+
+    fun fetchLoadMoreReviewData(movieId: String) {
+        viewModelScope.launch {
+            useCase.fetchReview(movieId, page.toString())
+                .onStart { _loadMoreStateReview.value = LoadMoreReviewMovieState.Loading(true) }
+                .catch { }
+                .collect {
+                    when (it) {
+                        is Result.Success -> {
+                            _loadMoreDataReview.value = it.data
+                            _loadMoreStateReview.value =
+                                LoadMoreReviewMovieState.Success(_loadMoreDataReview.value ?: listOf())
+                        }
+                        is Result.Error -> _loadMoreStateReview.value =
+                            LoadMoreReviewMovieState.Error(it.response.toBasicEntity())
                     }
                 }
         }
@@ -122,6 +148,7 @@ sealed class DetailDataState {
     data class Empty(val data: DetailMovieEntity) : DetailDataState()
     data class Error(val data: BasicEntity?) : DetailDataState()
 }
+
 sealed class ReviewMovieState {
     object Init : ReviewMovieState()
     data class Loading(val isLoading: Boolean = true) : ReviewMovieState()
@@ -129,6 +156,7 @@ sealed class ReviewMovieState {
     data class Empty(val data: List<ReviewEntity>) : ReviewMovieState()
     data class Error(val data: BasicEntity?) : ReviewMovieState()
 }
+
 sealed class LoadMoreReviewMovieState {
     object Init : LoadMoreReviewMovieState()
     data class Loading(val isLoading: Boolean = true) : LoadMoreReviewMovieState()
@@ -136,6 +164,7 @@ sealed class LoadMoreReviewMovieState {
     data class Empty(val data: List<ReviewEntity>) : LoadMoreReviewMovieState()
     data class Error(val data: BasicEntity?) : LoadMoreReviewMovieState()
 }
+
 sealed class VideoMovieState {
     object Init : VideoMovieState()
     data class Loading(val isLoading: Boolean = true) : VideoMovieState()

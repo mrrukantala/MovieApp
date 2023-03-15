@@ -129,7 +129,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun movieOnError(e: BasicEntity?) {
-        Toast.makeText(requireContext(), "terjadi gangguan mohon coba kembali", Toast.LENGTH_SHORT)
+        Toast.makeText(requireContext(), e?.message.toString() ?: "", Toast.LENGTH_SHORT)
             .show()
     }
 
@@ -146,8 +146,6 @@ class HomeFragment : Fragment() {
             currentData.addAll(data)
             adapter.notifyDataSetChanged()
             adapter.submitList(currentData)
-
-            viewModel.page++
         }
     }
 

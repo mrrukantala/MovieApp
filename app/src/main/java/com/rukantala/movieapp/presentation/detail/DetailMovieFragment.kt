@@ -2,10 +2,10 @@ package com.rukantala.movieapp.presentation.detail
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -19,10 +19,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import com.rukantala.movieapp.R
 import com.rukantala.movieapp.databinding.FragmentDetailMovieBinding
-import com.rukantala.movieapp.domain.entity.BasicEntity
-import com.rukantala.movieapp.domain.entity.DetailMovieEntity
-import com.rukantala.movieapp.domain.entity.ReviewEntity
-import com.rukantala.movieapp.domain.entity.VideoEntity
+import com.rukantala.movieapp.domain.entity.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -34,6 +31,8 @@ class DetailMovieFragment : Fragment() {
 
     private var isRequestingLoadMoreData = false
     private var isLoadMoreFinish = false
+
+    val currentDataReview: MutableList<ReviewEntity> = mutableListOf()
 
     private val menuNavController: NavController? by lazy {
         activity?.findNavController(R.id.nav_host_fragment_menu)
@@ -51,8 +50,7 @@ class DetailMovieFragment : Fragment() {
     private val args: DetailMovieFragmentArgs by navArgs()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentDetailMovieBinding.inflate(inflater, container, false)
         binding.rvGenre.adapter = adapterGenre
@@ -63,7 +61,20 @@ class DetailMovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
+        with(binding.nsv) {
+            viewTreeObserver.addOnScrollChangedListener {
+
+                val view = getChildAt(childCount - 1)
+                if (view.bottom - (height + scrollY) == 0 && !isRequestingLoadMoreData && !isLoadMoreFinish) {
+                    fetchLoadMoreReview(args.idMovie)
+                }
+            }
+        }
         observer()
+    }
+
+    private fun fetchLoadMoreReview(movieId: String) {
+        viewModel.fetchLoadMoreReviewData(movieId)
     }
 
     private fun observer() {
@@ -71,15 +82,49 @@ class DetailMovieFragment : Fragment() {
         fetchReviewMovie(args.idMovie)
         fetchVideoMovie(args.idMovie)
 
-        viewModel.state.flowWithLifecycle(lifecycle)
-            .onEach { handleStateData(it) }
+        viewModel.state.flowWithLifecycle(lifecycle).onEach { handleStateData(it) }
             .launchIn(lifecycleScope)
-        viewModel.stateReview.flowWithLifecycle(lifecycle)
-            .onEach { handleStateReview(it) }
+        viewModel.stateReview.flowWithLifecycle(lifecycle).onEach { handleStateReview(it) }
             .launchIn(lifecycleScope)
-        viewModel.stateVideo.flowWithLifecycle(lifecycle)
-            .onEach { handleStateVideo(it) }
+        viewModel.loadMoreStateReview.flowWithLifecycle(lifecycle)
+            .onEach { handleLoadMoreStateReview(it) }.launchIn(lifecycleScope)
+
+
+        viewModel.stateVideo.flowWithLifecycle(lifecycle).onEach { handleStateVideo(it) }
             .launchIn(lifecycleScope)
+    }
+
+    private fun handleLoadMoreStateReview(state: LoadMoreReviewMovieState) {
+        when (state) {
+            is LoadMoreReviewMovieState.Loading -> fetchLoadMoreReviewMovieOnLoading()
+            is LoadMoreReviewMovieState.Success -> {
+                fetchLoadMoreReviewMovieOnSuccess(state.data)
+                viewModel.page++
+            }
+            is LoadMoreReviewMovieState.Empty -> fetchLoadMoreReviewMovieOnEmpty()
+            is LoadMoreReviewMovieState.Error -> fetchLoadMoreReviewMovieOnError(state.data)
+            else -> {}
+        }
+    }
+
+    private fun fetchLoadMoreReviewMovieOnError(data: BasicEntity?) {
+        Toast.makeText(requireContext(), data?.message ?: "", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun fetchLoadMoreReviewMovieOnEmpty() {
+
+    }
+
+    private fun fetchLoadMoreReviewMovieOnSuccess(data: List<ReviewEntity>) {
+        if (data.isNotEmpty()) {
+            currentDataReview.addAll(data)
+            adapterReview.notifyDataSetChanged()
+            adapterReview.submitList(currentDataReview)
+        }
+    }
+
+    private fun fetchLoadMoreReviewMovieOnLoading() {
+        Toast.makeText(requireContext(), getString(R.string.lbl_loading), Toast.LENGTH_SHORT).show()
     }
 
     private fun fetchDetailMovie(movieId: String) {
@@ -122,7 +167,7 @@ class DetailMovieFragment : Fragment() {
     }
 
     private fun fetchReviewMovie(idMovie: String) {
-        viewModel.fetchReviewData(idMovie, "1")
+        viewModel.fetchReviewData(idMovie)
     }
 
     private fun fetchReviewMovieOnLoading() {
@@ -130,11 +175,10 @@ class DetailMovieFragment : Fragment() {
     }
 
     private fun fetchReviewMovieOnSuccess(data: List<ReviewEntity>) {
-
+        currentDataReview.addAll(data)
+        adapterReview.submitList(data)
 
         binding.msvReview.viewState = MultiStateView.ViewState.CONTENT
-        val adapter = binding.rvReview.adapter as ReviewAdapter
-        adapter.submitList(data)
     }
 
     private fun fetchReviewMovieOnEmpty() {
@@ -142,14 +186,17 @@ class DetailMovieFragment : Fragment() {
     }
 
     private fun fetchReviewMovieOnError(data: BasicEntity?) {
-
+        Toast.makeText(requireContext(), data?.message.toString() ?: "", Toast.LENGTH_SHORT).show()
     }
 
 
     private fun handleStateReview(state: ReviewMovieState) {
         when (state) {
             is ReviewMovieState.Loading -> fetchReviewMovieOnLoading()
-            is ReviewMovieState.Success -> fetchReviewMovieOnSuccess(state.data)
+            is ReviewMovieState.Success -> {
+                fetchReviewMovieOnSuccess(state.data)
+                viewModel.page++
+            }
             is ReviewMovieState.Empty -> fetchReviewMovieOnEmpty()
             is ReviewMovieState.Error -> fetchReviewMovieOnError(state.data)
             else -> {}
@@ -179,15 +226,13 @@ class DetailMovieFragment : Fragment() {
             }
 
             override fun onPlaybackQualityChange(
-                youTubePlayer: YouTubePlayer,
-                playbackQuality: PlayerConstants.PlaybackQuality
+                youTubePlayer: YouTubePlayer, playbackQuality: PlayerConstants.PlaybackQuality
             ) {
 
             }
 
             override fun onPlaybackRateChange(
-                youTubePlayer: YouTubePlayer,
-                playbackRate: PlayerConstants.PlaybackRate
+                youTubePlayer: YouTubePlayer, playbackRate: PlayerConstants.PlaybackRate
             ) {
 
             }
@@ -198,8 +243,7 @@ class DetailMovieFragment : Fragment() {
             }
 
             override fun onStateChange(
-                youTubePlayer: YouTubePlayer,
-                state: PlayerConstants.PlayerState
+                youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState
             ) {
 
             }
@@ -214,8 +258,7 @@ class DetailMovieFragment : Fragment() {
             }
 
             override fun onVideoLoadedFraction(
-                youTubePlayer: YouTubePlayer,
-                loadedFraction: Float
+                youTubePlayer: YouTubePlayer, loadedFraction: Float
             ) {
 
             }
