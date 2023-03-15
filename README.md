@@ -30,3 +30,6 @@ PEMBAHASAN
 **Mungkin hal ini masih memiliki beberapa bug(tetapi ini masih bisa diselesaikan) karena hal ini testing dan secara garis besar telah diimplementasikannya “endless scrolling”
 
 *Mungkin terdapat beberapa layout yang tidak memiliki kondisi state seperti state error dan empty hal ini bisa dilakukan jika memang suatu layout tersebut memanggil API yang sudah pasti berhasil dan memiliki data
+
+
+aplikasi ini bisa lebih ditunning dengan menerapkan Modularization
