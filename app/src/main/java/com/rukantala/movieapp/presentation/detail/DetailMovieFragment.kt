@@ -220,6 +220,7 @@ class DetailMovieFragment : Fragment() {
 
     private fun fetchVideoMovieOnSuccess(data: List<VideoEntity>) {
         if (data.isNotEmpty()) {
+            binding.msvVideo.viewState = MultiStateView.ViewState.CONTENT
             val data: YouTubePlayerListener = object : YouTubePlayerListener {
                 override fun onApiChange(youTubePlayer: YouTubePlayer) {
 
