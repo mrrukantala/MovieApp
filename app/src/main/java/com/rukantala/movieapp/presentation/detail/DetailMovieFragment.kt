@@ -45,8 +45,6 @@ class DetailMovieFragment : Fragment() {
     private val adapterReview: ReviewAdapter by lazy {
         ReviewAdapter()
     }
-
-
     private val args: DetailMovieFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -55,6 +53,14 @@ class DetailMovieFragment : Fragment() {
         binding = FragmentDetailMovieBinding.inflate(inflater, container, false)
         binding.rvGenre.adapter = adapterGenre
         binding.rvReview.adapter = adapterReview
+        binding.apply {
+            toolbar.setNavigationIcon(R.drawable.ic_round_arrow_back_24_black)
+            toolbar.title = "Detail Movie"
+
+            toolbar.setNavigationOnClickListener {
+                menuNavController?.navigateUp()
+            }
+        }
         return binding.root
     }
 
@@ -88,8 +94,6 @@ class DetailMovieFragment : Fragment() {
             .launchIn(lifecycleScope)
         viewModel.loadMoreStateReview.flowWithLifecycle(lifecycle)
             .onEach { handleLoadMoreStateReview(it) }.launchIn(lifecycleScope)
-
-
         viewModel.stateVideo.flowWithLifecycle(lifecycle).onEach { handleStateVideo(it) }
             .launchIn(lifecycleScope)
     }
@@ -124,7 +128,8 @@ class DetailMovieFragment : Fragment() {
     }
 
     private fun fetchLoadMoreReviewMovieOnLoading() {
-        Toast.makeText(requireContext(), getString(R.string.lbl_loading), Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), getString(R.string.lbl_loading), Toast.LENGTH_SHORT)
+            .show()
     }
 
     private fun fetchDetailMovie(movieId: String) {
@@ -186,7 +191,8 @@ class DetailMovieFragment : Fragment() {
     }
 
     private fun fetchReviewMovieOnError(data: BasicEntity?) {
-        Toast.makeText(requireContext(), data?.message.toString() ?: "", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), data?.message.toString() ?: "", Toast.LENGTH_SHORT)
+            .show()
     }
 
 
@@ -221,7 +227,10 @@ class DetailMovieFragment : Fragment() {
 
             }
 
-            override fun onError(youTubePlayer: YouTubePlayer, error: PlayerConstants.PlayerError) {
+            override fun onError(
+                youTubePlayer: YouTubePlayer,
+                error: PlayerConstants.PlayerError
+            ) {
 
             }
 

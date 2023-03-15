@@ -24,6 +24,7 @@ fun bindImageMovie(iv: ImageView, url: String?) {
 @BindingAdapter("imageAvatar")
 fun bindImageAvatar(iv: ImageView, url: String?) {
     url?.apply {
+        Log.v("DATA", url.toString())
         val imageUrl = ImageRequest.Builder(iv.context)
             .data(this.toUri())
             .allowHardware(false)

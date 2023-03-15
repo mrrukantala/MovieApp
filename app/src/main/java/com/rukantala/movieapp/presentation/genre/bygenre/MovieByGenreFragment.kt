@@ -54,6 +54,13 @@ class MovieByGenreFragment : Fragment() {
 
         binding = FragmentMovieByGenreBinding.inflate(inflater, container, false)
         binding.rvMovieByGenre.adapter = adapter
+        binding.apply {
+            toolbar.setNavigationIcon(R.drawable.ic_round_arrow_back_24_black)
+
+            toolbar.setNavigationOnClickListener {
+                menuNavController?.navigateUp()
+            }
+        }
 
         return binding.root
     }
@@ -126,6 +133,7 @@ class MovieByGenreFragment : Fragment() {
         binding.msvMovieByGenre.viewState =
             if (data.isEmpty()) MultiStateView.ViewState.EMPTY else MultiStateView.ViewState.CONTENT
 
+        isRequestingLoadMoreData = false
     }
 
     private fun movieOnEmpty(data: List<MovieEntity>) {
@@ -139,6 +147,7 @@ class MovieByGenreFragment : Fragment() {
     }
 
     private fun fetchLoadMoreMovie(idGenre: String) {
+        isRequestingLoadMoreData = true
         viewModel.fetchLoadMoreAllMovieByGenre(idGenre)
     }
 
@@ -152,14 +161,15 @@ class MovieByGenreFragment : Fragment() {
             adapter.notifyDataSetChanged()
             adapter.submitList(currentData)
         }
+        isRequestingLoadMoreData = false
     }
 
     private fun movieLoadMoreOnEmpty() {
-
+        isRequestingLoadMoreData = false
     }
 
     private fun movieLoadMoreOnError(e: BasicEntity?) {
-
+        isRequestingLoadMoreData = false
     }
 
 }

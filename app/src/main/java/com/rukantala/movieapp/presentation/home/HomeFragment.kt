@@ -83,7 +83,9 @@ class HomeFragment : Fragment() {
 
     private fun handleStateLoadMoreHome(state: HomeLoadMoreState) {
         when (state) {
-            is HomeLoadMoreState.Loading -> movieLoadMoreOnLoading()
+            is HomeLoadMoreState.Loading -> {
+                movieLoadMoreOnLoading()
+            }
             is HomeLoadMoreState.Success -> {
                 movieLoadMoreOnSuccess(state.data)
                 viewModel.page++
@@ -121,6 +123,8 @@ class HomeFragment : Fragment() {
 
         binding.msvMovie.viewState =
             if (data.isEmpty()) MultiStateView.ViewState.EMPTY else MultiStateView.ViewState.CONTENT
+
+        isRequestingLoadMoreData = false
     }
 
     private fun movieOnEmpty(data: List<MovieEntity>) {
@@ -134,6 +138,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun fetchLoadMoreMovie() {
+        isRequestingLoadMoreData = true
         viewModel.fetchLoadMoreMovie()
     }
 
@@ -147,14 +152,15 @@ class HomeFragment : Fragment() {
             adapter.notifyDataSetChanged()
             adapter.submitList(currentData)
         }
+        isRequestingLoadMoreData = false
     }
 
     private fun movieLoadMoreOnEmpty() {
-
+        isRequestingLoadMoreData = false
     }
 
     private fun movieLoadMoreOnError(e: BasicEntity?) {
-
+        isRequestingLoadMoreData = false
     }
 
 }

@@ -1,7 +1,6 @@
 package com.rukantala.movieapp.presentation.genre
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -97,27 +96,7 @@ class GenreFragment : Fragment() {
     }
 
     private fun movieOnError(e: BasicEntity?) {
-        Toast.makeText(requireContext(), "terjadi gangguan mohon coba kembali", Toast.LENGTH_SHORT)
+        Toast.makeText(requireContext(), e?.message ?: "", Toast.LENGTH_SHORT)
             .show()
-    }
-
-    private fun fetchLoadMoreMovie() {
-
-    }
-
-    private fun movieLoadMoreOnLoading() {
-
-    }
-
-    private fun movieLoadMoreOnSuccess(data: List<GenreEntity>) {
-
-    }
-
-    private fun movieLoadMoreOnEmpty() {
-
-    }
-
-    private fun movieLoadMoreOnError(e: BasicEntity?) {
-
     }
 }

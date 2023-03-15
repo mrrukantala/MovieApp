@@ -74,6 +74,10 @@
         <item name="android:textColor">@color/primary</item>
     </style>
 
+    <style name="nunitosansbold.16sp.black1">
+        <item name="android:textColor">@color/black1</item>
+    </style>
+
     <style name="nunitosansbold.18sp.primary">
         <item name="android:textColor">@color/primary</item>
     </style>

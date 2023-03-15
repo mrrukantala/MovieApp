@@ -9,4 +9,5 @@
     <string name="lbl_video_thiler">Video Thiler</string>
     <string name="lbl_user_review">User Review</string>
     <string name="lbl_loading">Loading</string>
+    <string name="tidak_ditemukan_data_apapun">Tidak ditemukan data apapun</string>
 </resources>
