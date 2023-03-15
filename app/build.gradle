@@ -108,4 +108,7 @@ dependencies {
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:0.26'
 
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.0"
+
+    // circle image view
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
 }

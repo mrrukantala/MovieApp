@@ -3,6 +3,7 @@ package com.rukantala.movieapp.data.api
 import com.rukantala.movieapp.data.model.*
 import com.rukantala.movieapp.utils.ResponseListGenreWrapper
 import com.rukantala.movieapp.utils.ResponseListWrapper
+import com.rukantala.movieapp.utils.ResponseObjectWrapper
 import com.rukantala.movieapp.utils.ResponseReviewWrapper
 import retrofit2.Response
 import retrofit2.http.GET
@@ -24,7 +25,7 @@ interface HomeApi {
         @Query("page") page: String
     ): Response<ResponseReviewWrapper<MovieItem>>
 
-    @GET("movie/{movie_id")
+    @GET("movie/{movie_id}")
     suspend fun fetchDetailMovie(
         @Path("movie_id") movieId: String
     ): Response<DetailMovieItem>
@@ -32,11 +33,11 @@ interface HomeApi {
     @GET("movie/{movie_id}/videos")
     suspend fun fetchVideoMovie(
         @Path("movie_id") movieId: String
-    ): Response<ResponseListWrapper<VideoItem>>
+    ): Response<ResponseReviewWrapper<VideoItem>>
 
     @GET("movie/{movie_id}/reviews")
     suspend fun fetchReview(
         @Path("movie_id") movieId: String,
-        @Path("page") page: String
+        @Query("page") page: String
     ): Response<ResponseReviewWrapper<ReviewItem>>
 }

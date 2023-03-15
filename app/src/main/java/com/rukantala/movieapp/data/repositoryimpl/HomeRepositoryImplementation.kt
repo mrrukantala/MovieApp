@@ -58,7 +58,6 @@ class HomeRepositoryImplementation @Inject constructor(
 
             if (response.isSuccessful) {
                 val body = response.body()?.data
-                Log.v("DD", body.toString())
                 val data = mutableListOf<MovieEntity>()
                 body?.forEach { data.add(it.toMovieEntity()) }
                 emit(Result.Success(data))
@@ -72,7 +71,6 @@ class HomeRepositoryImplementation @Inject constructor(
         return flow {
             delay(300)
             val response = api.fetchDetailMovie(movieId)
-
             if (response.isSuccessful) {
                 emit(Result.Success(response.body()?.toDetailMovie()!!))
             } else {

@@ -19,9 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_8dp"
-            android:elevation="@dimen/_8dp"
+            android:elevation="@dimen/_4dp"
             app:cardCornerRadius="@dimen/_12dp"
-            app:cardElevation="8dp"
+            app:cardElevation="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="8dp">
@@ -36,8 +36,8 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView"
-                    android:layout_width="120dp"
-                    android:layout_height="160dp"
+                    android:layout_width="100dp"
+                    android:layout_height="140dp"
                     app:cardCornerRadius="@dimen/_12dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -54,6 +54,7 @@
 
                 <TextView
                     android:id="@+id/tvTitle"
+                    style="@style/nunitosansbold.16sp.primary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_8dp"
@@ -61,11 +62,13 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/cardView"
                     app:layout_constraintTop_toTopOf="@+id/cardView"
-                    app:layout_constraintVertical_bias="0.3"
+                    app:layout_constraintVertical_bias="0.19999999"
                     tools:text="Judul" />
 
+                <!--
                 <TextView
                     android:id="@+id/tvGenreTitle"
+                    style="@style/nunitosans.14sp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_8dp"
@@ -73,35 +76,40 @@
                     app:layout_constraintStart_toEndOf="@+id/cardView"
                     app:layout_constraintTop_toBottomOf="@+id/tvTitle"
                     tools:text="Genre" />
+                   -->
 
                 <TextView
                     android:id="@+id/tvDateRelase"
+                    style="@style/nunitosans.14sp.black3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_8dp"
                     android:layout_marginTop="1dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/cardView"
-                    app:layout_constraintTop_toBottomOf="@+id/tvGenreTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTitle"
                     tools:text="21-04-2000" />
 
                 <TextView
                     android:id="@+id/tvRatingLabel"
+                    style="@style/nunitosans.12sp.black3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_8dp"
                     android:text="@string/lbl_rating"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvRatingValue"
                     app:layout_constraintStart_toEndOf="@+id/cardView"
                     app:layout_constraintTop_toBottomOf="@+id/tvDateRelase" />
 
                 <TextView
                     android:id="@+id/tvRatingValue"
+                    style="@style/nunitosansbold.16sp.primary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_8dp"
                     android:layout_marginStart="@dimen/_8dp"
                     app:layout_constraintStart_toEndOf="@+id/tvRatingLabel"
-                    app:layout_constraintTop_toTopOf="@+id/tvRatingLabel"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDateRelase"
                     tools:text="8.0" />
 
 

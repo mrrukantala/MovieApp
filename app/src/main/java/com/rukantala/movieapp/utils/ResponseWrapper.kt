@@ -15,6 +15,6 @@ data class ResponseReviewWrapper<T>(
 )
 
 data class ResponseObjectWrapper<T>(
-    @SerializedName("items") val data: T? = null
+    @SerializedName("") val data: T? = null
 )
 

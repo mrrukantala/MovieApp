@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Nunito -->
+    <style name="nunitosans">
+        <item name="android:fontFamily">@font/nunito_sans</item>
+    </style>
+
+    <style name="nunitosansbold">
+        <item name="android:fontFamily">@font/nunito_sans_bold</item>
+    </style>
+
+    <style name="nunitosans.12sp">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="nunitosans.14sp">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="nunitosans.16sp">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="nunitosans.18sp">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="nunitosans.20sp">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="nunitosans.22sp">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="nunitosansbold.12sp">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="nunitosansbold.14sp">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="nunitosansbold.16sp">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="nunitosansbold.18sp">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="nunitosansbold.20sp">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="nunitosansbold.22sp">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="nunitosans.12sp.black3">
+        <item name="android:textColor">@color/black3</item>
+    </style>
+
+    <style name="nunitosans.14sp.black3">
+        <item name="android:textColor">@color/black3</item>
+    </style>
+
+
+    <style name="nunitosansbold.14sp.primary">
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <style name="nunitosansbold.16sp.primary">
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <style name="nunitosansbold.18sp.primary">
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <style name="nunitosans.20sp.black">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="nunitosans.16sp.black3">
+        <item name="android:textColor">@color/black3</item>
+    </style>
+
+    <style name="nunitosans.12sp.Black2">
+        <item name="android:textColor">@color/black2</item>
+    </style>
+    <style name="nunitosans.14sp.Black1">
+        <item name="android:textColor">@color/black1</item>
+    </style>
+    <style name="nunitosans.14sp.Black2">
+        <item name="android:textColor">@color/black2</item>
+    </style>
+
+</resources>

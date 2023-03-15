@@ -4,15 +4,15 @@ import com.google.gson.annotations.SerializedName
 import com.rukantala.movieapp.domain.entity.DetailMovieEntity
 
 data class DetailMovieItem(
-    @field:SerializedName("id") val id: Int? = 0,
-    @field:SerializedName("original_title") val originalTitle: String? = "",
-    @field:SerializedName("overview") val overview: String? = "",
-    @field:SerializedName("vote_average") val voteAverage: String? = "",
-    @field:SerializedName("poster_path") val posterPath: String? = "",
-    @field:SerializedName("backdrop_path") val imagePath: String? = "",
-    @field:SerializedName("release_date") val releaseDate: String? = "",
-    @field:SerializedName("title") val title: String? = "",
-    @field:SerializedName("genres") val genres: List<GenreItem>? = mutableListOf()
+    @SerializedName("id") val id: Int? = 0,
+    @SerializedName("original_title") val originalTitle: String? = "",
+    @SerializedName("overview") val overview: String? = "",
+    @SerializedName("vote_average") val voteAverage: String? = "",
+    @SerializedName("poster_path") val posterPath: String? = "",
+    @SerializedName("backdrop_path") val imagePath: String? = "",
+    @SerializedName("release_date") val releaseDate: String? = "",
+    @SerializedName("title") val title: String? = "",
+    @SerializedName("genres") val genres: List<GenreItem>? = mutableListOf()
 ) {
     fun toDetailMovie() = DetailMovieEntity(
         id.toString() ?: "",

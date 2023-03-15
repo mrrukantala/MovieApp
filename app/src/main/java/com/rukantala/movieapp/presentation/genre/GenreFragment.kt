@@ -34,7 +34,7 @@ class GenreFragment : Fragment() {
         GenreAdapter(GenreAdapter.OnclickListener {
             menuNavController?.navigate(
                 GenreFragmentDirections.actionGenreFragmentToMovieByGenreFragment(
-                it.id.toString()
+                    it.id.toString()
                 )
             )
         })
@@ -83,7 +83,6 @@ class GenreFragment : Fragment() {
     }
 
     private fun movieOnSuccess(data: List<GenreEntity>) {
-        Log.v("DATA", data.toString())
         val adapter = binding.rvGenre.adapter as GenreAdapter
         adapter.submitList(data)
 

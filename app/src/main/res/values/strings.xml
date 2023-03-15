@@ -5,4 +5,5 @@
     <string name="lbl_menu_beranda">Home</string>
     <string name="lbl_menu_genre">Genre</string>
     <string name="lbl_rating">Rating</string>
+    <string name="lbl_description">Description</string>
 </resources>

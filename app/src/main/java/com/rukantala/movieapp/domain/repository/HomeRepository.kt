@@ -22,14 +22,16 @@ interface HomeRepository {
     suspend fun fetchMovieByGenre(genre: String, page: String):
             Flow<Result<List<MovieEntity>, BasicResponse>>
 
+
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun fetchDetailMovie(movieId: String): Flow<Result<DetailMovieEntity, BasicResponse>>
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
     suspend fun fetchVideoMovie(movieId: String): Flow<Result<List<VideoEntity>, BasicResponse>>
 
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
     suspend fun fetchReview(
         movieId: String,
         page: String

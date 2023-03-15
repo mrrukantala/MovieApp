@@ -83,7 +83,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun movieOnSuccess(data: List<MovieEntity>) {
-        Log.v("DATA", data.toString())
         val adapter = binding.rvMovie.adapter as MovieAdapter
         adapter.submitList(data)
 
