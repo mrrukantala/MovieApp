@@ -80,6 +80,7 @@ class DetailMovieFragment : Fragment() {
     }
 
     private fun fetchLoadMoreReview(movieId: String) {
+        isRequestingLoadMoreData = true
         viewModel.fetchLoadMoreReviewData(movieId)
     }
 
@@ -113,10 +114,12 @@ class DetailMovieFragment : Fragment() {
 
     private fun fetchLoadMoreReviewMovieOnError(data: BasicEntity?) {
         Toast.makeText(requireContext(), data?.message ?: "", Toast.LENGTH_SHORT).show()
+        isRequestingLoadMoreData = false
     }
 
     private fun fetchLoadMoreReviewMovieOnEmpty() {
-
+        Toast.makeText(requireContext(), "Tidak ada data", Toast.LENGTH_SHORT).show()
+        isRequestingLoadMoreData = false
     }
 
     private fun fetchLoadMoreReviewMovieOnSuccess(data: List<ReviewEntity>) {
@@ -124,7 +127,10 @@ class DetailMovieFragment : Fragment() {
             currentDataReview.addAll(data)
             adapterReview.notifyDataSetChanged()
             adapterReview.submitList(currentDataReview)
+        } else {
+            fetchLoadMoreReviewMovieOnEmpty()
         }
+        isRequestingLoadMoreData = false
     }
 
     private fun fetchLoadMoreReviewMovieOnLoading() {
@@ -183,7 +189,6 @@ class DetailMovieFragment : Fragment() {
         if (data.isEmpty()) fetchReviewMovieOnEmpty() else {
             currentDataReview.addAll(data)
             adapterReview.submitList(data)
-
             binding.msvReview.viewState = MultiStateView.ViewState.CONTENT
         }
     }
